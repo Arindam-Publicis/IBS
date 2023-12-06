@@ -8,11 +8,14 @@ public class RBI {
     int withdrawlTime;
     int flag;
     float balance = 1000.0f;
+    float FDROI,LoanROI;
     public RBI(InputStreamReader isr, BufferedReader buff) {
         this.isr = isr;
         this.buff = buff;
         withdrawlTime=0;
         flag=0;
+        FDROI=6;
+        LoanROI=12;
     }
 
 
@@ -45,8 +48,20 @@ public class RBI {
             e.printStackTrace();
         }
     }
-    public void openFD(float amount, float ROI, int years) {}
-    public void applyLoan(String loanType, float amount, float ROI, int years) {}
+    public void openFD(float amount, float FDROI, int years) {
+        System.out.println("You are going to create a FD of "+amount+" rupees");
+        for(int i=0;i<years;i++){
+            float total=amount*(float)Math.pow((100d+FDROI)/100,i+1);
+            System.out.println("After "+(i+1)+" year(s) your total amount will be "+total);
+            if(i==years-1) System.out.println("Your total profit will be "+(total-amount));
+        }
+    }
+    public void applyLoan(String loanType, float amount, float LoanROI, int years) {
+        System.out.println("You are going to take a loan of "+amount+" rupees");
+        float total=amount*(float)Math.pow((100d+LoanROI)/100,years);
+        System.out.println("After "+years+" year(s) your total repay amount will be "+total);
+        System.out.println("You have to give an interest of "+(total-amount)+" inr only.");
+    }
     public void applyCreditCard() {}
     public float getBalance() {
         return balance;
