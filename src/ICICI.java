@@ -2,7 +2,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class ICICI implements Bank {
@@ -11,15 +10,17 @@ public class ICICI implements Bank {
     HashMap<String, Float> mp = new HashMap<>();
     private int withdrawTime = 0;
     private int flag = 0;
-    private float miniBalance = 5000f;
-    private float balance = miniBalance;
+    float miniBalance;
+    private float bankBalance;
     private float FDROI = 7.5f;
-
-    public ICICI(InputStreamReader isr, BufferedReader buff) {
+    Customer customer;
+    public ICICI(InputStreamReader isr, BufferedReader buff,Customer customer) {
         this.isr = isr;
         this.buff = buff;
-        Customer customer = new Customer(isr, buff);
+        miniBalance=5000f;
+        this.customer=customer;
         System.out.println("Hey " + customer.getCustomerName() + ", we have opened an ICICI account for you with a balance of " + miniBalance + " inr.");
+        customer.setBalance(miniBalance);
     }
 
     @Override
@@ -27,8 +28,9 @@ public class ICICI implements Bank {
         System.out.println("Enter the amount you want to deposit");
         try {
             float amt = Float.parseFloat(buff.readLine());
-            balance += amt;
-            System.out.println(amt + " inr is deposited in your account. Your current account balance is " + balance);
+            customer.addBalance(amt);
+            System.out.println(amt + " inr is deposited in your account. Your current account balance is " + customer.getBalance());
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -39,12 +41,14 @@ public class ICICI implements Bank {
         System.out.println("Enter the amount you want to withdraw");
         try {
             float amt = Float.parseFloat(buff.readLine());
+            float balance=customer.getBalance();
             if (balance - amt - flag * (amt * 0.01f) >= miniBalance) {
                 balance -= amt + flag * (amt * 0.01f);
                 withdrawTime++;
                 if (withdrawTime > 3) flag = 1;
-
+                customer.setBalance(balance);
                 System.out.println(amt + " inr is withdrawn from your account. Your current account balance is " + balance);
+
             } else System.out.println("You have less than or equal to " + miniBalance + " inr in your account");
         } catch (IOException e) {
             e.printStackTrace();
@@ -79,6 +83,7 @@ public class ICICI implements Bank {
 
     @Override
     public void applyLoan() {
+        float balance=customer.getBalance();
         if (balance > 2f * miniBalance) {
             mp.put("Home", 9f);
             mp.put("Education", 5f);
@@ -114,6 +119,7 @@ public class ICICI implements Bank {
             float total = loanAmt * (float) Math.pow((100d + mp.getOrDefault(loanList.get(number - 1), 0f)) / 100, years);
             System.out.println("After " + years + " year(s) your total repay amount will be " + total);
             System.out.println("You have to give an interest of " + (total - loanAmt) + " inr only.");
+
         } else
             System.out.println("Sorry, right now you are not eligible to take a loan. Please try again after some months.");
     }
@@ -125,12 +131,12 @@ public class ICICI implements Bank {
 
     @Override
     public float getBalance() {
-        return balance;
+        return bankBalance;
     }
 
     @Override
-    public int getWithdrawTime() {
-        return 0;
+    public float getMiniBalance() {
+        return miniBalance;
     }
 
 }

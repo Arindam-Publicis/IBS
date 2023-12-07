@@ -6,5 +6,5 @@ public interface Bank {
     void applyLoan();
     void applyCreditCard();
     float getBalance();
-    int getWithdrawTime();
+    float getMiniBalance();
 }

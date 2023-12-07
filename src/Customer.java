@@ -12,6 +12,7 @@ public class Customer {
     public Customer(InputStreamReader isr, BufferedReader buff) {
         this.isr=isr;
         this.buff=buff;
+        balance=0;
         ArrayList<String> custDet = new ArrayList<>(Arrays.asList("Name", "Email", "Address", "Gender", "Aadhaar Number", "Phone Number"));
         for (String it : custDet) {
             System.out.println("Please enter your " + it);
@@ -97,6 +98,9 @@ public class Customer {
 
     public void setBalance(float balance) {
         this.balance = balance;
+    }
+    public void addBalance(float balance) {
+        this.balance+= balance;
     }
     public void showCustomerDetails(){
         System.out.println("Showing Details->");

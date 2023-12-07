@@ -1,32 +1,37 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class HDFC implements Bank {
     BufferedReader buff;
     InputStreamReader isr;
-    private int withdrawTime=0;
-    private int flag=0;
-    private float miniBalance=4000f;
-    private float balance = miniBalance;
-    private float FDROI=6.9f;
-    HashMap<String,Float> mp=new HashMap<>();
-    public HDFC(InputStreamReader isr, BufferedReader buff) {
+    HashMap<String, Float> mp = new HashMap<>();
+    private int withdrawTime = 0;
+    private int flag = 0;
+    float miniBalance;
+    private float bankBalance;
+    private float FDROI = 7.5f;
+    Customer customer;
+    public HDFC(InputStreamReader isr, BufferedReader buff,Customer customer) {
         this.isr = isr;
         this.buff = buff;
-        Customer customer = new Customer(isr,buff);
-        System.out.println("Hey "+customer.getCustomerName()+", we have opened a HDFC account for you with a balance of "+miniBalance+" inr.");
+        miniBalance=5000f;
+        this.customer=customer;
+        System.out.println("Hey " + customer.getCustomerName() + ", we have opened a HDFC account for you with a balance of " + miniBalance + " inr.");
+        customer.setBalance(miniBalance);
     }
+
     @Override
     public void depositMoney() {
         System.out.println("Enter the amount you want to deposit");
         try {
-            float amt=Float.parseFloat(buff.readLine());
-            balance+=amt;
-            System.out.println(amt+" inr is deposited in your account. Your current account balance is "+balance);
-        }
-        catch (IOException e){
+            float amt = Float.parseFloat(buff.readLine());
+            customer.addBalance(amt);
+            System.out.println(amt + " inr is deposited in your account. Your current account balance is " + customer.getBalance());
+
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -35,57 +40,56 @@ public class HDFC implements Bank {
     public void withdrawMoney() {
         System.out.println("Enter the amount you want to withdraw");
         try {
-            float amt=Float.parseFloat(buff.readLine());
-            if(balance-amt-flag*(amt*0.01f)>=miniBalance){
-                balance-=amt+flag*(amt*0.01f);
+            float amt = Float.parseFloat(buff.readLine());
+            float balance=customer.getBalance();
+            if (balance - amt - flag * (amt * 0.01f) >= miniBalance) {
+                balance -= amt + flag * (amt * 0.01f);
                 withdrawTime++;
-                if(withdrawTime>3)flag=1;
+                if (withdrawTime > 3) flag = 1;
+                customer.setBalance(balance);
+                System.out.println(amt + " inr is withdrawn from your account. Your current account balance is " + balance);
 
-                System.out.println(amt+" inr is withdrawn from your account. Your current account balance is "+balance);
-            }
-            else System.out.println("You have less than or equal to "+miniBalance+" inr in your account");
-        }
-        catch (IOException e){
-            e.printStackTrace();
+            } else System.out.println("You have less than or equal to " + miniBalance + " inr in your account");
+        } catch (IOException e) {
+            e.fillInStackTrace();
         }
     }
 
     @Override
     public void openFD() {
-        System.out.println("Currently we are offering rate of interest of "+FDROI+"%.");
+        System.out.println("Currently we are offering rate of interest of " + FDROI + "%.");
         System.out.println("Enter the amount of which you want to make FD");
-        float fdAmt=0;
-        int years=0;
+        float fdAmt = 0;
+        int years = 0;
         try {
-            fdAmt=Float.parseFloat(buff.readLine());
-        }
-        catch (IOException e){
+            fdAmt = Float.parseFloat(buff.readLine());
+        } catch (IOException e) {
             e.printStackTrace();
         }
         System.out.println("Enter the number of years for which you want to create FD");
         try {
-            years=Integer.parseInt(buff.readLine());
-        }
-        catch (IOException e){
+            years = Integer.parseInt(buff.readLine());
+        } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("You are going to create a FD of "+fdAmt+" rupees");
-        for(int i=0;i<years;i++){
-            float total=fdAmt*(float)Math.pow((100d+FDROI)/100,i+1);
-            System.out.println("After "+(i+1)+" year(s) your total amount will be "+total);
-            if(i==years-1) System.out.println("Your total profit will be "+(total-fdAmt));
+        System.out.println("You are going to create a FD of " + fdAmt + " rupees");
+        for (int i = 0; i < years; i++) {
+            float total = fdAmt * (float) Math.pow((100d + FDROI) / 100, i + 1);
+            System.out.println("After " + (i + 1) + " year(s) your total amount will be " + total);
+            if (i == years - 1) System.out.println("Your total profit will be " + (total - fdAmt));
         }
 
     }
 
     @Override
     public void applyLoan() {
-        if(balance>2f*miniBalance) {
-            mp.put("Home",9f);
-            mp.put("Education",5f);
-            mp.put("Personal",10f);
-            mp.put("Car",11f);
-            ArrayList<String> loanList=new ArrayList<>(mp.keySet());
+        float balance=customer.getBalance();
+        if (balance > 2f * miniBalance) {
+            mp.put("Home", 9f);
+            mp.put("Education", 5f);
+            mp.put("Personal", 10f);
+            mp.put("Car", 11f);
+            ArrayList<String> loanList = new ArrayList<>(mp.keySet());
             System.out.println("Please choose which type of loan you want to take");
             int i = 0;
             for (String it : loanList) System.out.println(++i + ". " + it + " loan");
@@ -95,13 +99,12 @@ public class HDFC implements Bank {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            System.out.println("Currently we are providing "+loanList.get(number - 1)+" loan for "+mp.getOrDefault(loanList.get(number - 1), 0f)+"% of interest annually.");
+            System.out.println("Currently we are providing " + loanList.get(number - 1) + " loan for " + mp.getOrDefault(loanList.get(number - 1), 0f) + "% of interest annually.");
             System.out.println("Enter the amount of which you want to take Loan");
-            float loanAmt=0;
+            float loanAmt = 0;
             try {
-                loanAmt=Float.parseFloat(buff.readLine());
-            }
-            catch (IOException e){
+                loanAmt = Float.parseFloat(buff.readLine());
+            } catch (IOException e) {
                 e.printStackTrace();
             }
 
@@ -116,8 +119,9 @@ public class HDFC implements Bank {
             float total = loanAmt * (float) Math.pow((100d + mp.getOrDefault(loanList.get(number - 1), 0f)) / 100, years);
             System.out.println("After " + years + " year(s) your total repay amount will be " + total);
             System.out.println("You have to give an interest of " + (total - loanAmt) + " inr only.");
-        }
-        else System.out.println("Sorry, right now you are not eligible to take a loan. Please try again after some months.");
+
+        } else
+            System.out.println("Sorry, right now you are not eligible to take a loan. Please try again after some months.");
     }
 
     @Override
@@ -127,12 +131,12 @@ public class HDFC implements Bank {
 
     @Override
     public float getBalance() {
-        return balance;
+        return bankBalance;
     }
 
     @Override
-    public int getWithdrawTime() {
-        return 0;
+    public float getMiniBalance() {
+        return miniBalance;
     }
 
 }
