@@ -16,25 +16,6 @@ public class SBI implements Bank {
         this.isr = isr;
         this.buff = buff;
         Customer customer = new Customer(isr,buff);
-        ArrayList<String> custDet=new ArrayList<>(Arrays.asList("Name","Email","Address","Gender","Aadhaar Number","Phone Number"));
-        for(String it:custDet){
-            System.out.println("Please enter your "+it);
-            try {
-                String custInput=buff.readLine();
-                switch (it){
-                    case "Name"->customer.setCustomerName(custInput);
-                    case "Email"->customer.setCustomerEmail(custInput);
-                    case "Address"->customer.setCustomerAddress(custInput);
-                    case "Gender"->customer.setCustomerGender(custInput);
-                    case "Aadhaar Number"->customer.setCustomerAadhar(custInput);
-                    case "Phone Number"->customer.setCustomerPhone(custInput);
-                }
-            }
-            catch (IOException e){
-                e.printStackTrace();
-            }
-
-        }
         System.out.println("Hey "+customer.getCustomerName()+", we have opened a SBI account for you with a balance of "+miniBalance+" inr.");
     }
     @Override

@@ -17,11 +17,8 @@ public class Main {
 
     public static void main(String[] args) {
         Main obj = new Main();
-
-
         ArrayList<String> arr = new ArrayList<>(Arrays.asList("ICICI", "HDFC", "SBI", "AXIS"));
         System.out.println("Welcome to IBS");
-
         System.out.println("Please select your bank");
         int i = 0;
         for (String it : arr) {
@@ -32,6 +29,7 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         Bank bank;
         switch (obj.selectedBank) {
             case 1 -> bank = new ICICI(obj.isr, obj.buff);

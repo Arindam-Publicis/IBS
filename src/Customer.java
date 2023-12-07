@@ -1,5 +1,8 @@
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Customer {
     private String customerName, customerEmail, customerAddress, customerGender, customerAadhar, customerPhone;
@@ -9,6 +12,24 @@ public class Customer {
     public Customer(InputStreamReader isr, BufferedReader buff) {
         this.isr=isr;
         this.buff=buff;
+        ArrayList<String> custDet = new ArrayList<>(Arrays.asList("Name", "Email", "Address", "Gender", "Aadhaar Number", "Phone Number"));
+        for (String it : custDet) {
+            System.out.println("Please enter your " + it);
+            try {
+                String custInput = buff.readLine();
+                switch (it) {
+                    case "Name" -> setCustomerName(custInput);
+                    case "Email" -> setCustomerEmail(custInput);
+                    case "Address" -> setCustomerAddress(custInput);
+                    case "Gender" ->setCustomerGender(custInput);
+                    case "Aadhaar Number" ->setCustomerAadhar(custInput);
+                    case "Phone Number" ->setCustomerPhone(custInput);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
     }
     public Customer(String customerName, String customerEmail, String customerAddress, String customerGender, String customerAadhar, String customerPhone, float balance) {
         this.customerName = customerName;
