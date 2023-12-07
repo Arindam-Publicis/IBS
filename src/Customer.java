@@ -2,8 +2,8 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 public class Customer {
-    String customerName, customerEmail, customerAddress, customerGender, customerAadhar, customerPhone;
-    float balance;
+    private String customerName, customerEmail, customerAddress, customerGender, customerAadhar, customerPhone;
+    private float balance;
     BufferedReader buff;
     InputStreamReader isr;
     public Customer(InputStreamReader isr, BufferedReader buff) {
