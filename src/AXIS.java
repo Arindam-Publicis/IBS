@@ -13,18 +13,33 @@ public class AXIS implements Bank {
     float miniBalance;
     private float bankBalance;
     private float FDROI = 7.5f;
-    Customer customer;
-    public AXIS(InputStreamReader isr, BufferedReader buff,Customer customer) {
-        this.isr = isr;
-        this.buff = buff;
-        miniBalance=5000f;
-        this.customer=customer;
-        System.out.println("Hey " + customer.getCustomerName() + ", we have opened an AXIS account for you with a balance of " + miniBalance + " inr.");
-        customer.setBalance(miniBalance);
+    private ArrayList<Customer>custList=new ArrayList<>();
+    public String getName(){
+        return "AXIS";
+    }
+    @Override
+    public ArrayList<Customer> getCustList() {
+        return custList;
     }
 
+    public void setCustList(ArrayList<Customer> custList) {
+        this.custList = custList;
+    }
+
+    Customer customer;
+    public AXIS(InputStreamReader isr, BufferedReader buff) {
+        this.isr = isr;
+        this.buff = buff;
+        miniBalance=2000f;
+    }
     @Override
-    public void depositMoney() {
+    public void addCustomer(Customer customer){
+        System.out.println("Hey " + customer.getCustomerName() + ", we have opened an AXIS account for you with a balance of " + customer.getBalance() + " inr.");
+        custList.add(customer);
+        this.customer=customer;
+    }
+    @Override
+    public void depositMoney(Customer customer) {
         System.out.println("Enter the amount you want to deposit");
         try {
             float amt = Float.parseFloat(buff.readLine());
@@ -32,12 +47,12 @@ public class AXIS implements Bank {
             System.out.println(amt + " inr is deposited in your account. Your current account balance is " + customer.getBalance());
 
         } catch (IOException e) {
-            e.printStackTrace();
+            e.fillInStackTrace();
         }
     }
 
     @Override
-    public void withdrawMoney() {
+    public void withdrawMoney(Customer customer) {
         System.out.println("Enter the amount you want to withdraw");
         try {
             float amt = Float.parseFloat(buff.readLine());
@@ -51,12 +66,12 @@ public class AXIS implements Bank {
 
             } else System.out.println("You have less than or equal to " + miniBalance + " inr in your account");
         } catch (IOException e) {
-            e.printStackTrace();
+            e.fillInStackTrace();
         }
     }
 
     @Override
-    public void openFD() {
+    public void openFD(Customer customer) {
         System.out.println("Currently we are offering rate of interest of " + FDROI + "%.");
         System.out.println("Enter the amount of which you want to make FD");
         float fdAmt = 0;
@@ -64,13 +79,13 @@ public class AXIS implements Bank {
         try {
             fdAmt = Float.parseFloat(buff.readLine());
         } catch (IOException e) {
-            e.printStackTrace();
+            e.fillInStackTrace();
         }
         System.out.println("Enter the number of years for which you want to create FD");
         try {
             years = Integer.parseInt(buff.readLine());
         } catch (IOException e) {
-            e.printStackTrace();
+            e.fillInStackTrace();
         }
         System.out.println("You are going to create a FD of " + fdAmt + " rupees");
         for (int i = 0; i < years; i++) {
@@ -82,7 +97,7 @@ public class AXIS implements Bank {
     }
 
     @Override
-    public void applyLoan() {
+    public void applyLoan(Customer customer) {
         float balance=customer.getBalance();
         if (balance > 2f * miniBalance) {
             mp.put("Home", 9f);
@@ -97,7 +112,7 @@ public class AXIS implements Bank {
             try {
                 number = Integer.parseInt(buff.readLine());
             } catch (IOException e) {
-                e.printStackTrace();
+                e.fillInStackTrace();
             }
             System.out.println("Currently we are providing " + loanList.get(number - 1) + " loan for " + mp.getOrDefault(loanList.get(number - 1), 0f) + "% of interest annually.");
             System.out.println("Enter the amount of which you want to take Loan");
@@ -105,7 +120,7 @@ public class AXIS implements Bank {
             try {
                 loanAmt = Float.parseFloat(buff.readLine());
             } catch (IOException e) {
-                e.printStackTrace();
+                e.fillInStackTrace();
             }
 
 
@@ -113,7 +128,7 @@ public class AXIS implements Bank {
             try {
                 years = Integer.parseInt(buff.readLine());
             } catch (IOException e) {
-                e.printStackTrace();
+                e.fillInStackTrace();
             }
             System.out.println("You are going to take a loan of " + loanAmt + " rupees of " + loanList.get(number - 1) + " type for " + years + " years");
             float total = loanAmt * (float) Math.pow((100d + mp.getOrDefault(loanList.get(number - 1), 0f)) / 100, years);
@@ -125,7 +140,7 @@ public class AXIS implements Bank {
     }
 
     @Override
-    public void applyCreditCard() {
+    public void applyCreditCard(Customer customer) {
 
     }
 

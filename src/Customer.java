@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Customer {
-    private String customerName, customerEmail, customerAddress, customerGender, customerAadhar, customerPhone;
+    private String customerName, customerEmail, customerAddress, customerGender, customerAadhar, customerPhone,id;
     private float balance;
     BufferedReader buff;
     InputStreamReader isr;
@@ -13,7 +13,7 @@ public class Customer {
         this.isr=isr;
         this.buff=buff;
         balance=0;
-        ArrayList<String> custDet = new ArrayList<>(Arrays.asList("Name", "Email", "Address", "Gender", "Aadhaar Number", "Phone Number"));
+        ArrayList<String> custDet = new ArrayList<>(Arrays.asList("Name", "Email", "Address", "Gender", "Phone Number"));
         for (String it : custDet) {
             System.out.println("Please enter your " + it);
             try {
@@ -23,11 +23,10 @@ public class Customer {
                     case "Email" -> setCustomerEmail(custInput);
                     case "Address" -> setCustomerAddress(custInput);
                     case "Gender" ->setCustomerGender(custInput);
-                    case "Aadhaar Number" ->setCustomerAadhar(custInput);
                     case "Phone Number" ->setCustomerPhone(custInput);
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                e.fillInStackTrace();
             }
 
         }
@@ -42,7 +41,13 @@ public class Customer {
         this.balance = balance;
     }
 
+    public String getId() {
+        return id;
+    }
 
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getCustomerName() {
         return customerName;

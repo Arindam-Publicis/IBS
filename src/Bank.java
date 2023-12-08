@@ -1,10 +1,14 @@
-public interface Bank {
+import java.util.ArrayList;
 
-    void depositMoney();
-    void withdrawMoney();
-    void openFD();
-    void applyLoan();
-    void applyCreditCard();
+public interface Bank {
+    String getName();
+    void depositMoney(Customer customer);
+    void withdrawMoney(Customer customer);
+    void openFD(Customer customer);
+    void applyLoan(Customer customer);
+    void applyCreditCard(Customer customer);
     float getBalance();
     float getMiniBalance();
+    void addCustomer(Customer customer);
+    ArrayList<Customer> getCustList();
 }
